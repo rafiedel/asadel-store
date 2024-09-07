@@ -9,7 +9,7 @@
 ## Link Website
 
 Website dapat diakses melalui:  
-[https://contoh-aplikasi-pws.com](https://contoh-aplikasi-pws.com)
+http://rafie-asadel-aasadelsstore.pbp.cs.ui.ac.id/
 
 ## Jawaban
 
