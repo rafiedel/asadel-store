@@ -157,7 +157,7 @@ python manage.py makemigrationspython manage.py migrate
 4. **Built-in Feature**
    - **Fitur Siap Pakai**: Django sudah disediakan berbagai fitur siap pakai untuk memudahkan dan mempercepat proses pengembangan
 
-## E. Model Django Disebut ORM
+### E. Model Django Disebut ORM
 
 ORM *(Object-Relational Mapping)* adalah teknik pengembangan perangkat lunak yang menghubungkan suatu kelas objek ke kolom, baris, dan tabel di suatu basis data menjadi sebuah data. 
 
