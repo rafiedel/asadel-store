@@ -109,7 +109,7 @@ python manage.py makemigrationspython manage.py migrate
 
 ### B. Alur Kerja Request dan Respon pada Django
 
-![ERROR](README_IMAGES\tugas2\django.png)
+![ERROR](README_IMAGES/tugas2/django.png)
 
 #### Client -> URL Configuration -> Views -> Model -> BasisData
 1. **Client** mengirim permintaan (request) yang akan diterima oleh URL proyek.
