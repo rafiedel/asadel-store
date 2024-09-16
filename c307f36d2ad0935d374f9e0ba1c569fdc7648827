@@ -1,0 +1,17 @@
+### Tugas 3
+
+#### Done:
+- Empty path redirects to view all product
+- Refactor template for improved layout
+- Add views:
+  - show xml
+  - show xml by id
+  - show json
+  - show json by id
+  - create product
+  - view all product
+- Remove view: show_main
+
+#### Todo:
+- Fix image upload implementation
+- Answer Tugas 3 question in README
