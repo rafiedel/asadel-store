@@ -1,0 +1,50 @@
+{% extends 'app.html' %}
+{% block content %}
+<h1>Asadel Store</h1>
+
+<h5>NPM: </h5>
+<p>{{ npm }}<p>
+
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Class:</h5>
+<p>{{ class }}</p>
+
+<table>
+
+{% if not products %}
+<p>Belum ada data mood pada mental health tracker.</p>
+{% else %}
+
+<table>
+<tr>
+<th>Name</th>
+<th>Price</th>
+<th>Stock Available</th>
+<th>Description</th>
+<th>Photo</th>
+</tr>
+
+{% for product in products %}
+<tr>
+<td>{{product.name}}</td>
+<td>{{product.price}}</td>
+<td>{{product.stock_available}}</td>
+<td>{{product.description}}</td>
+<td>
+    {% if product.photo %}
+    <img src="{{ product.photo.url }}">
+    {% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'create_product' %}">
+<button>Add New Product</button>
+</a>
+{% endblock content %}

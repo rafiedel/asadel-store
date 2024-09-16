@@ -1,4 +1,10 @@
-# Tugas Individu 2 : Implementasi Model-View-Template (MVT) pada Django
+# ASADEL STORE - Tugas Individu PBP
+
+## Daftar Isi
+- [Identitas Mahasiswa](#identitas-mahasiswa)
+- [Link Website](#link-website)
+- [Tugas Individu 2 : Implementasi Model-View-Template (MVT) pada Django](#tugas-individu-2-implementasi-model-view-template-mvt-pada-django)
+- [Tugas Individu 3 : Implementasi Form dan Data Delivery pada Django](#tugas-individu-3--implementasi-form-dan-data-delivery-pada-django)
 
 ## Identitas Mahasiswa
 
@@ -9,9 +15,9 @@
 ## Link Website
 
 Website dapat diakses melalui:  
-http://rafie-asadel-aasadelsstore.pbp.cs.ui.ac.id/
+http://rafie-asadel-asadelstore.pbp.cs.ui.ac.id/
 
-## Jawaban
+## Tugas Individu 2 : Implementasi Model-View-Template (MVT) pada Django
 
 ### A. Cara Implementasi Checklist Tahapan Pengerjaan Tugas
 Berikut adalah langkah-langkah implementasi checklist secara detail:
@@ -103,7 +109,7 @@ python manage.py makemigrationspython manage.py migrate
 
 ### B. Alur Kerja Request dan Respon pada Django
 
-![ERROR](django.png)
+![ERROR](README_IMAGES\tugas2\django.png)
 
 #### Client -> URL Configuration -> Views -> Model -> BasisData
 1. **Client** mengirim permintaan (request) yang akan diterima oleh URL proyek.
@@ -162,3 +168,22 @@ python manage.py makemigrationspython manage.py migrate
 ORM *(Object-Relational Mapping)* adalah teknik pengembangan perangkat lunak yang menghubungkan suatu kelas objek ke kolom, baris, dan tabel di suatu basis data menjadi sebuah data. 
 
 Dalam Django, pengembang menggunakan bahasa pemrograman Python untuk CRUD (membuat, mengambil, memperbarui, dan menghapus) data tanpa menulis SQL secara langsung. Jadi, Django secara otomatis mengelola pemetaan data-data di basis data tersebut, sedangkan pengembang bisa fokus membuat kode pemrograman Python.
+
+## Tugas Individu 3 : Implementasi Form dan Data Delivery pada Django
+
+### A. Implementasikan *Data Delivery* 
+- mengapa perlu implementasi itu
+### B. JSON dan XML
+- lebih baik json atau xml
+- mengapa json lebih terkenal
+### C. Method is_valid()
+- jelaskan fungsi
+- mengapa perlu di django
+### D. Komponen csrf_token untuk Formulir Django
+- mengapa dibutuhkan
+- apa yang terjadi bila tidak ada itu
+- bagaimana hal tersebut dapat dimanfaatkan oleh penyerang
+### E. Cara Implementasi Jawaban dari Tugas3 A-D
+-
+-
+-
