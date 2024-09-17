@@ -7,12 +7,14 @@ from django.http import HttpResponse
 from django.core import serializers
 
 def create_product(request):
-    form = ProductForm(request.POST or None)
+    if request.method == "POST":
+        form  = ProductForm(request.POST , request.FILES)
 
-    if form.is_valid() and request.method == "POST":
-        form.save()
-        return HttpResponseRedirect(reverse('view_all_product'))
+        if form.is_valid() :
+            form.save()
+            return HttpResponseRedirect(reverse('view_all_product'))
 
+    form = ProductForm()
     context = {'form': form}
     return render(request, "create_product.html", context)
 

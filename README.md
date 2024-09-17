@@ -171,19 +171,137 @@ Dalam Django, pengembang menggunakan bahasa pemrograman Python untuk CRUD (membu
 
 ## Tugas Individu 3 : Implementasi Form dan Data Delivery pada Django
 
-### A. Implementasikan *Data Delivery* 
-- mengapa perlu implementasi itu
+### A. *Data Delivery* untuk Platfrom
+
+Tujuan utama user mengakses sebuah platform adalah untuk melihat informasi, sedangkan informasi tersebut hanya diambil melalui server. Dengan *data delivery* platform dapat mengirim permintaan ke server lalu dikembalikan dalam bentuk respon sesuai permintaannya. Pada akhirnya, platform akan menampilkan respon yang dikirim oleh server.
+
 ### B. JSON dan XML
-- lebih baik json atau xml
-- mengapa json lebih terkenal
+
+Dalam konteks *data delivery* akan lebih memudahkan developer mengolah data format JSON untuk dapat ditampilkan kepada user. Hal tersebut karena strukturnya yang lebih simple dan mudah dibaca, ukuran data lebih kecil, dan lebih cepat diparsing daripada XML. Maka dari itu, format JSON lebih sering dipakai untuk mengirim data melalui API.
+
 ### C. Method is_valid()
-- jelaskan fungsi
-- mengapa perlu di django
+
+Method tersebut adalah bawaan django yang berfungsi untuk memvalidasi semua input agar tidak terkena error ketika disimpan. Dengan method tersebut, kita telah dimudahkan agar tidak perlu membuat logic validasi input lagi.
+
 ### D. Komponen csrf_token untuk Formulir Django
-- mengapa dibutuhkan
-- apa yang terjadi bila tidak ada itu
-- bagaimana hal tersebut dapat dimanfaatkan oleh penyerang
+
+Komponen tersebut sangat diperlukan untuk menjaga keamanan data. Bila tidak ada itu, maka dapat dilakukan penyerangan CSRF (*Cross-Site Request Forgery*). Hal tersebut dapat dimanfaatkan oleh penyerang untuk mengirim permintaan yang berbahaya, seperti mengirim malware ke basis data.
+
 ### E. Cara Implementasi Jawaban dari Tugas3 A-D
--
--
--
+1. **Setup Form**
+   - Membuat file *forms.py* di dalam *main* dan isi dengan
+   ```python
+   from django import forms
+   from django.forms import ModelForm
+   from main.models import Product
+
+   class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ["name", "price", "description", "stock_available", "photo"]
+   ```
+   - Membuat views nya dengan mengupdate *views.py* dengan
+   ```python
+
+   def create_product(request):
+      if request.method == "POST":
+         form  = ProductForm(request.POST , request.FILES)
+
+         if form.is_valid() :
+               form.save()
+               return HttpResponseRedirect(reverse('view_all_product'))
+
+      form = ProductForm()
+      context = {'form': form}
+      return render(request, "create_product.html", context)
+   ```
+   - Tambahkan routing dari views diatas dengan
+   ```python
+   urlpatterns = [
+      ...
+      path('create-product', create_product, name='create_product'),
+      ...
+   ]
+   ```
+   - Membuat file *app.html* di folder *templates* dan isi dengan
+   ```html
+   {% load static %}
+   <!DOCTYPE html>
+   <html lang="en">
+      <head>
+         <meta charset="UTF-8" />
+         <meta
+               name="viewport"
+               content="width=device-width, initial-scale=1.0"
+         />
+         <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+         {% block meta %}
+         {% endblock meta %}
+      </head>
+
+      <body>
+         {% block content %}
+         {% endblock content %}
+      </body>
+   </html>
+   ```
+   - Lalum, membuat file *create_all_product.html* di folder *templates* dan isi dengan
+   ```html
+   {% extends 'app.html' %} 
+
+   {% block content %}
+   <h1>Add New Product</h1>
+
+   <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <table>
+         {{ form.as_table }}
+         <tr>
+               <td></td>
+               <td>
+                  <input type="submit" value="Add Product"/>
+               </td>
+         </tr>
+      </table>
+   </form>
+
+   {% endblock %}
+   ```
+2. **Views Pengambilan Data dalam Format XML dan JSON**
+   - Untuk menampilkan data dalam format XML dan JSON (All mauapun by id) dapat dilakukan dengan mengupdate *views.py* dengan
+   ```python
+   ...
+   def show_xml(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+   def show_json(request):
+      data = Product.objects.all()
+      return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+   def show_xml_by_id(request, id):
+      data = Product.objects.filter(pk=id)
+      return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+   def show_json_by_id(request, id):
+      data = Product.objects.filter(pk=id)
+      return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+   ```
+
+3. **Membuat Routing Views dari Point 2**
+   - Setelah itu, inisialisasi routing agar dapat menjalankan views tersebut
+   ```python
+   urlpatterns = [
+      ...
+      path('xml/', show_xml, name='show_xml'),
+      path('json/', show_json, name='show_json'), 
+      path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+      path('json/<str:id>/', show_json_by_id, name='show_json_by_id'), 
+   ]
+   ```
+
+### F. Bukti Respon Views di Postman
+![ERROR](README_IMAGES/tugas3/json.png)
+![ERROR](README_IMAGES/tugas3/json_id.png)
+![ERROR](README_IMAGES/tugas3/xml.png)
+![ERROR](README_IMAGES/tugas3/xml_id.png)
