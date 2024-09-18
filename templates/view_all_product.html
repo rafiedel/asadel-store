@@ -2,14 +2,27 @@
 {% block content %}
 <h1>Asadel Store</h1>
 
-<h5>NPM: </h5>
-<p>{{ npm }}<p>
+ <!-- 
+    Cari cara untuk bisa update style.css nya, style div itu diganti row aja
+    ATAU langsung pake tailwind aja :v
+ -->
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+<div style="display: flex; align-items: baseline; gap: 10px;">
+    <h5>NPM: </h5>
+    <p>{{ npm }}<p>
+</div>
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
+<div style="display: flex; align-items: baseline; gap: 10px;">
+    <h5>Name:</h5>
+    <p>{{ name }}</p>
+</div>
+
+<div style="display: flex; align-items: baseline; gap: 10px;">
+    <h5>Class:</h5>
+    <p>{{ class }}</p>
+</div>
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 
 <table>
 
@@ -46,5 +59,8 @@
 
 <a href="{% url 'create_product' %}">
 <button>Add New Product</button>
+</a>
+<a href="{% url 'logout' %}">
+    <button>Logout</button>
 </a>
 {% endblock content %}

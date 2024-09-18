@@ -305,3 +305,21 @@ Komponen tersebut sangat diperlukan untuk menjaga keamanan data. Bila tidak ada 
 ![ERROR](README_IMAGES/tugas3/json_id.png)
 ![ERROR](README_IMAGES/tugas3/xml.png)
 ![ERROR](README_IMAGES/tugas3/xml_id.png)
+
+
+## Tugas Individu 4 : Implementasi Autentikasi, Session, dan Cookies pada Django
+
+## A. Django UserCreationForm
+- adalah...
+- apa kelebihan dan kekurangannya
+## B. Autentikasi dan Otorisasi dalam Django
+- perbedaan keduanya
+- mengapa keduanya penting
+### C. Cookies pada Web
+- apa itu cookies
+- bagaimana django mengulah cookies untuk mengelola data sesi pengguna
+### D. Keamanan Cookies
+- apakah aman secara default
+- apakah ada resiko potensial yang harus diwaspadai
+
+### E. Cara Implementasi Jawaban dari Tugas4 A-D

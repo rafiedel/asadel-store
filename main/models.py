@@ -1,6 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Product (models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, 
+        default=1)
     name = models.CharField(
         max_length=30, 
         error_messages={'required': True})
