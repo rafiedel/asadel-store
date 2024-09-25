@@ -509,3 +509,7 @@ urlpatterns = [
 </a>
 ...
 ```
+3. Membuat 3 Dummy Data untuk masing-masing User (Dua User)
+
+![ERROR](README_IMAGES/tugas3/dummy1.png)
+![ERROR](README_IMAGES/tugas3/dummy2.png)
