@@ -1,10 +1,16 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
 class Product (models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, 
+        User, 
+        on_delete=models.CASCADE, 
         default=1)
+    # id = models.UUIDField(  # tambahkan ini biar bisa pass id
+    #     primary_key=True, 
+    #     default=uuid.uuid4, 
+    #     editable=False)
     name = models.CharField(
         max_length=30, 
         error_messages={'required': True})
