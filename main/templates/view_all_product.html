@@ -1,18 +1,19 @@
-{% extends 'app.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<h1>Asadel Store</h1>
 
-<div style="display: flex; align-items: baseline; gap: 10px;">
+{% include 'navbar.html' %}
+
+<div class='flex flex-row'>
     <h5>NPM: </h5>
     <p>{{ npm }}<p>
 </div>
 
-<div style="display: flex; align-items: baseline; gap: 10px;">
+<div class='flex flex-row'>
     <h5>Name:</h5>
     <p>{{ name }}</p>
 </div>
 
-<div style="display: flex; align-items: baseline; gap: 10px;">
+<div class='flex flex-row'>
     <h5>Class:</h5>
     <p>{{ class }}</p>
 </div>
@@ -73,3 +74,9 @@
     <button>Logout</button>
 </a>
 {% endblock content %}
+
+<footer>
+    <div class="flex flex-row">
+        <p>{{npm}} Rafie Asadel Tarigan {{class}}</p>
+    </div>
+</footer>

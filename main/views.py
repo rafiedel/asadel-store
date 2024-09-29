@@ -16,7 +16,9 @@ def check_authentication(request):
     if request.COOKIES == None:
         return redirect('login')
     
-    return redirect('view_all_product')
+    response = HttpResponseRedirect(reverse('view_all_product'))
+    response.set_cookie('last_login', str(datetime.datetime.now()))
+    return response
 
 @login_required(login_url="login")
 def view_all_product(request):
@@ -101,7 +103,6 @@ def login_user(request):
             login(request, user)
             response = HttpResponseRedirect(reverse(next_url))
             response.set_cookie('last_login', str(datetime.datetime.now()))
-            print(next_url + "-")
             return response
 
     else:

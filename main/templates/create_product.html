@@ -1,19 +1,16 @@
-{% extends 'app.html' %}
-
-{% load static %}
+{% extends 'base.html' %} 
 
 {% block content %}
+<h1>Add New Product</h1>
 
-<h1>Edit Mood</h1>
-
-<form method="POST">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
         <tr>
             <td></td>
             <td>
-                <input type="submit" value="Edit Mood"/>
+                <input type="submit" value="Add Product"/>
             </td>
         </tr>
     </table>

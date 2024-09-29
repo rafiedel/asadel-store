@@ -1,0 +1,54 @@
+<nav class="sticky top-0">
+    <div class="flex justify-between">
+        <div>Asadel Store</div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex">
+            <span>{{ user.username }}</span>
+            <a href="{% url 'logout' %}">
+                <button>Logout</button>
+            </a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+            <button id="mobile-menu-button">
+                <!-- Hamburger Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="flex flex-col ">
+        <span>{{ user.username }}</span>
+        <a href="{% url 'logout' %}">
+            <button>Logout</button>
+        </a>
+    </div>
+</nav>
+
+<script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    // Toggle the mobile menu when the button is clicked
+    mobileMenuButton.onclick = function () {
+        mobileMenu.classList.toggle('hidden');
+    };
+
+    // Function to hide the mobile menu on desktop view
+    function hideMobileMenuOnDesktop() {
+        if (window.innerWidth >= 768) { // md breakpoint for Tailwind is 768px
+            mobileMenu.classList.add('hidden'); // Ensure mobile menu is hidden on desktop
+        }
+    }
+
+    // Listen for window resize events
+    window.addEventListener('resize', hideMobileMenuOnDesktop);
+
+    // Call the function on page load to ensure menu is hidden if the page loads in desktop view
+    hideMobileMenuOnDesktop();
+</script>
