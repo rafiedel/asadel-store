@@ -4,9 +4,34 @@
 
 {% block content %}
 
-<h1>Edit Mood</h1>
+<div 
+    class="
+        flex items-center justify-center min-h-screen
+    ">
+    <div 
+        class="
+            w-full max-w-md
+        ">
+        <h2 class="text-center font-extrabold text-3xl">Edit Product</h2>
+        <form method='POST' enctype="multipart/form-data"> 
+            {% csrf_token %}
+            <div>
+                {% include 'input_section.html' with text='Name' type='text' for='name' value=form.name.value %}
+                {% include 'input_section.html' with text='Price' type='number' for='price' value=form.price.value %}
+                {% include 'input_section.html' with text='Description' type='text' for='description' value=form.description.value %}
+                {% include 'input_section.html' with text='Stock Available' type='number' for='stock_available' value=form.stock_available.value %}
+                {% include 'input_section.html' with text='Photo' type='file' for='photo' value=form.photo.value %}
+            </div>
+            {% include 'button.html' with text='Submit' color='blue'%}
+        </form>
+    </div>
+</div>
 
-<form method="POST">
+
+
+<!-- <h1>Edit Mood</h1>
+
+<form method="POST"  enctype="multipart/form-data">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
@@ -17,6 +42,6 @@
             </td>
         </tr>
     </table>
-</form>
+</form> -->
 
 {% endblock %}

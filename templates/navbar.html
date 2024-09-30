@@ -1,13 +1,14 @@
-<nav class="sticky top-0">
+<nav class="sticky top-0 bg-white shadow-md p-4">
     <div class="flex justify-between">
-        <div>Asadel Store</div>
+        <div class="font-mono font-bold">ASADELSTORE</div>
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex">
-            <span>{{ user.username }}</span>
-            <a href="{% url 'logout' %}">
-                <button>Logout</button>
-            </a>
+            <span>{{ user.username }} || PBP {{class}} || {{npm}}</span>
+            <div class="w-10"></div>
+            <div class="w-20">
+                {% include 'button.html' with text='Logout' href='logout' color='red'%}
+            </div>
         </div>
 
         <!-- Mobile Menu Button -->
@@ -22,11 +23,9 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="flex flex-col ">
-        <span>{{ user.username }}</span>
-        <a href="{% url 'logout' %}">
-            <button>Logout</button>
-        </a>
+    <div id="mobile-menu" class="flex flex-col gap-4">
+        <span>{{ user.username }} || PBP {{class}} || {{npm}}</span>
+        {% include 'button.html' with text='Logout' href='logout' color='red'%}
     </div>
 </nav>
 
@@ -34,21 +33,21 @@
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    // Toggle the mobile menu when the button is clicked
+    // Toggle Mobile Menu
     mobileMenuButton.onclick = function () {
         mobileMenu.classList.toggle('hidden');
     };
 
-    // Function to hide the mobile menu on desktop view
+    // When desktop mode / width is >= 768 (md breakpoint for Tailwind), hide mobile menu
     function hideMobileMenuOnDesktop() {
-        if (window.innerWidth >= 768) { // md breakpoint for Tailwind is 768px
-            mobileMenu.classList.add('hidden'); // Ensure mobile menu is hidden on desktop
+        if (window.innerWidth >= 768) { 
+            mobileMenu.classList.add('hidden');
         }
     }
 
-    // Listen for window resize events
+    // Add previous function as window event listener
     window.addEventListener('resize', hideMobileMenuOnDesktop);
 
-    // Call the function on page load to ensure menu is hidden if the page loads in desktop view
+    // Mobile menu is always hidden when the page is loaded
     hideMobileMenuOnDesktop();
 </script>

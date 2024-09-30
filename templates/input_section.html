@@ -1,0 +1,33 @@
+<div class="mb-4">
+    <label for="{{ for }}" class="block">{{ text }}</label>
+    {% if for == 'description' %}
+        <textarea 
+            id="{{ for }}" 
+            name="{{ for }}" 
+            rows="10" 
+            required 
+            class="
+                block w-full 
+                border border-black
+            ">{{ value }}</textarea>
+    {% else %}
+        <input 
+            id="{{ for }}" 
+            name="{{ for }}" 
+            type="{{ type }}" 
+            {% if type == 'number' %} 
+            min="0" 
+            step="1" 
+            {% endif %} 
+            {% if type != "file" %}
+            required 
+            {% endif %}
+            {% if value %}
+            value="{{ value }}"
+            {% endif %}
+            class="
+                block w-full 
+                border border-black
+            ">
+    {% endif %}
+</div>

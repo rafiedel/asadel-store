@@ -1,19 +1,28 @@
 {% extends 'base.html' %} 
 
 {% block content %}
-<h1>Add New Product</h1>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Product"/>
-            </td>
-        </tr>
-    </table>
-</form>
+<div 
+    class="
+        flex items-center justify-center min-h-screen
+    ">
+    <div 
+        class="
+            w-full max-w-md
+        ">
+        <h2 class="text-center font-extrabold text-3xl">Add Product</h2>
+        <form method='POST' enctype="multipart/form-data"> 
+            {% csrf_token %}
+            <div>
+                {% include 'input_section.html' with text='Name' type='text' for='name' %}
+                {% include 'input_section.html' with text='Price' type='number' for='price' %}
+                {% include 'input_section.html' with text='Description' type='text' for='description' %}
+                {% include 'input_section.html' with text='Stock Available' type='number' for='stock_available' %}
+                {% include 'input_section.html' with text='Photo' type='file' for='photo' %}
+            </div>
+            {% include 'button.html' with text='Submit' color='blue'%}
+        </form>
+    </div>
+</div>
 
 {% endblock %}

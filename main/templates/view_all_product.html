@@ -3,80 +3,39 @@
 
 {% include 'navbar.html' %}
 
-<div class='flex flex-row'>
-    <h5>NPM: </h5>
-    <p>{{ npm }}<p>
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message | safe }}
 </div>
+{% endfor %}
 
-<div class='flex flex-row'>
-    <h5>Name:</h5>
-    <p>{{ name }}</p>
+<div class="p-4 flex justify-between">
+    <h5><span class="font-semibold">Sesi terakhir login</span>: <br>{{ last_login }}</h5>
+    <div class="w-18">{% include 'button.html' with text='Add Product' href='add' color='blue'%}</div>
 </div>
-
-<div class='flex flex-row'>
-    <h5>Class:</h5>
-    <p>{{ class }}</p>
-</div>
-
-<h5>Sesi terakhir login: {{ last_login }}</h5>
 
 <table>
 
 {% if not products %}
-<p>There isn't any data yet</p>
+
+<div class="flex flex-col items-center justify-center h-64">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20zm-2 14h4m-4-8h.01M16.5 8.5a.5.5 0 11-.5-.5.5.5 0 01.5.5zm-9 0a.5.5 0 11-.5-.5.5.5 0 01.5.5z"/>
+    </svg>
+    <p>No products available.</p>
+</div>
+
 {% else %}
 
-<table>
-<tr>
-<th>Name</th>
-<th>Price</th>
-<th>Stock Available</th>
-<th>Description</th>
-<th>Photo</th>
-</tr>
+<div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for product in products %}
+        {% include 'product_card.html' %}
+    {% endfor %}
+</div>
 
-{% for product in products %}
-<tr>
-    <td>{{product.name}}</td>
-    <td>{{product.price}}</td>
-    <td>{{product.stock_available}}</td>
-    <td>{{product.description}}</td>
-    <td>
-        {% if product.photo %}
-        <img src="{{ product.photo.url }}" style="max-width: 10rem;">
-        {% endif %}
-    </td>
-    <td>
-        <a href="{% url 'edit_product' product.pk%}">
-            <button>
-                Edit
-            </button>
-        </a>
-    </td>
-    <td>
-        <a href="{% url 'delete_product' product.pk %}">
-            <button>
-                Delete
-            </button>
-        </a>
-    </td>
-</tr>
-{% endfor %}
-</table>
 {% endif %}
 
-<br />
-
-<a href="{% url 'create_product' %}">
-<button>Add New Product</button>
-</a>
-<a href="{% url 'logout' %}">
-    <button>Logout</button>
-</a>
 {% endblock content %}
-
-<footer>
-    <div class="flex flex-row">
-        <p>{{npm}} Rafie Asadel Tarigan {{class}}</p>
-    </div>
-</footer>
