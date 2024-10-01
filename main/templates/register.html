@@ -28,7 +28,7 @@
         <h2 class="text-center font-extrabold text-3xl">Register</h2>
         <form method='POST' action=''> 
             {% csrf_token %}
-            <div>
+            <div class="ml-4 mr-4 mb-4">
               {% include 'input_section.html' with text='Username' type='text'  for='username' value=form.username.value %}
 
               {% if form.username.errors %}
@@ -59,7 +59,9 @@
                   </div>
               {% endif %}
             </div>
-            {% include 'button.html' with text='Submit' color='blue'%}
+            <div class="ml-4 mr-4">
+              {% include 'button.html' with text='Submit' color='blue'%}
+            </div>
         </form>
         {% if messages %}
           <ul class="mb-4 text-red-600">
@@ -68,7 +70,7 @@
             {% endfor %}
           </ul>
         {% endif %}
-        <p class="text-center">
+        <p class="text-center ml-4 mr-4">
           Already have an account?
           <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login Now</a>
         </p>

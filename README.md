@@ -6,6 +6,7 @@
 - [Tugas Individu 2 : Implementasi Model-View-Template (MVT) pada Django](#tugas-individu-2-implementasi-model-view-template-mvt-pada-django)
 - [Tugas Individu 3 : Implementasi Form dan Data Delivery pada Django](#tugas-individu-3--implementasi-form-dan-data-delivery-pada-django)
 - [Tugas Individu 4 : Implementasi Autentikasi, Season, dan Cookies pada Django](#tugas-individu-4--implementasi-autentikasi-session-dan-cookies-pada-django)
+- [Tugas Individu 5 : Desain Web menggunakan HTML, CSS dan Framework CSS](#tugas-individu-5--desain-web-menggunakan-html-css-dan-framework-css)
 
 ## Identitas Mahasiswa
 
@@ -513,3 +514,221 @@ urlpatterns = [
 
 ![ERROR](README_IMAGES/tugas3/dummy1.png)
 ![ERROR](README_IMAGES/tugas3/dummy2.png)
+
+## Tugas Individu 5 : Desain Web menggunakan HTML, CSS dan Framework CSS
+
+### A. Urutan Prioritas CSS selector
+1. !important dalam style sheet maupun inline styles
+```html
+<img src="gambar.jpg" style="border: 1px solid black !important; background-color: yellow !important;">
+<head>
+  <style>
+    img {
+      border: 1px solid black !important;
+      background-color: yellow !important;
+    }
+  </style>
+</head>
+```
+2. Inline styles 
+```html
+<img src="gambar.jpg" style="width: 300px; height: 200px;">
+```html
+3. Style sheet:
+- ID selector (#id).
+```html
+<head>
+  <style>
+    #gambar {
+      border: 2px dashed blue;
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+  <img id="gambar" src="gambar.jpg" width="300" height="200">
+</body>
+```
+- Class, pseudo-class, dan attribute selector (.class, :hover, [type="text"]).
+```html
+<head>
+  <style>
+    .gambar-class {
+      border: 2px solid green;
+    }
+    img:hover {
+      opacity: 0.7;
+    }
+    input[type="text"] {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+  <img class="gambar-class" src="gambar.jpg" width="300" height="200">
+  <input type="text" placeholder="Masukkan teks...">
+</body>
+```
+- Tag/element selector (div, p).
+```html
+<head>
+  <style>
+    p {
+      color: blue;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <p>Ini adalah contoh paragraf.</p>
+</body>
+```
+- Ordering: jika dua selector memiliki tingkat spesifisitas yang sama, yang didefinisikan terakhir akan diterapkan.
+```html
+<head>
+  <style>
+    p {
+      color: red; /* ini akan tertimpa */
+    }
+    p {
+      color: green; /* ini akan diterapkan karena didefinisikan terakhir */
+    }
+  </style>
+</head>
+<body>
+  <p>Ini adalah contoh paragraf.</p>
+</body>
+```
+5. Inline attributes 
+```html
+<img src="gambar.jpg" width="300" height="200">
+```
+4. Inheritance (gaya yang diwariskan dari elemen parent ke child).
+```html
+<head>
+  <style>
+    .parent {
+      color: purple; /* Gaya diwariskan */
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <p>Ini adalah paragraf yang diwarisi gaya.</p>
+  </div>
+</body>
+```
+### B. Pentingnya Responsive Design
+Pengguna akan nyaman melihat tampilan aplikasi dari berbagai platform, karena akan menyesuaikan ukuran dan penataan tiap component yang disajikan dengan tinggi dan lebar sebuah perangkat.
+Contoh:
+- Web Responsive : https://www.tokopedia.com/
+- Web Non-Responsive : https://dequeuniversity.com/library/responsive/1-non-responsive 
+### C. Perbedaan & Cara Implementasi Margin, Border, dan Padding
+Margin
+- Membuat ruang di luar sebuah component
+Padding
+- Membuat ruang di dalam sebuah component
+Border
+- Membuat garis atau batas di sekitar sebuah komponen
+
+Cara implementasi:
+```html
+<div style="margin: 20px; padding: 15px; border: 2px solid black;"></div>
+```
+### D. Flex Box & Grid Layout
+| **Aspek**            | **Flexbox**                            | **Grid Layout**                         |
+|----------------------|----------------------------------------|-----------------------------------------|
+| **Konsep**           | Sistem layout satu dimensi (baris atau kolom) | Sistem layout dua dimensi (baris dan kolom) |
+| **Kegunaan Utama**   | Mengatur item secara fleksibel dalam satu arah (horizontal atau vertikal) | Mengatur item dalam baris dan kolom, cocok untuk layout kompleks |
+| **Responsif**        | Responsif secara otomatis berdasarkan ukuran kontainer | Mudah disesuaikan untuk berbagai ukuran layar dengan kontrol grid |
+| **Pengaturan Ruang** | Mengatur jarak antar item dengan lebih fleksibel | Memberikan kontrol lebih terhadap ukuran dan posisi elemen dalam grid |
+| **Penggunaan Ideal** | Untuk elemen yang bergerak dalam satu arah (misalnya navigasi, toolbar) | Untuk tata letak yang lebih kompleks seperti galeri, halaman, atau dasbor |
+| **Kemudahan**        | Sederhana untuk layout linier | Lebih kompleks namun lebih fleksibel untuk layout multi-dimensi |
+
+### E. Cara Implementasi Checklist
+1. Implementasi fungsi hapus dan edit produk
+
+- Menambahkan views untuk edit dan delete suatu produk sesuai id, di *main/views.py*
+```py
+def edit_product(request, id):
+    mood = Product.objects.get(pk = id)
+
+    form = ProductForm(request.POST or None, instance=mood)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('view_all_product'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    mood = Product.objects.get(pk = id)
+    mood.delete()
+    return HttpResponseRedirect(reverse('view_all_product'))
+```
+
+- Menyambungkan views tersebut ke url configuration di *main/urls.py*
+```py
+urlpatterns = [
+    ...
+    path('edit-product/<str:id>', edit_product, name='edit_product'),
+    path('delete/<str:id>', delete_product, name='delete_product'),
+    ...
+]
+```
+
+- Membuat halaman hmtl edit dan menambahkan 2 button yang akan menuju ke halaman edit dan mendelete produk, lalu integrate dengan url yang sudah di setup
+*main/templates/edit_product.html*
+```html
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>Edit Mood</h1>
+
+<form method="POST"  enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Edit Mood"/>
+            </td>
+        </tr>
+    </table>
+</form>
+{% endblock %}
+```
+*main/templates/view_all_product.html*
+```html
+...
+<tr>
+    ...
+    <td>
+        <a href="{% url 'main:edit_mood' mood_entry.pk %}">
+            <button>
+                Edit
+            </button>
+        </a>
+    </td>
+    <td>
+        <a href="{% url 'main:delete_mood' mood_entry.pk %}">
+            <button>
+                Delete
+            </button>
+        </a>
+    </td>
+</tr>
+...
+```
+
+2. Kustomisasi template html (login, register, tambah produk, daftar produk, card produk, navbar)
+- Konfigurasi Tailwind dengan menambahkan file tailwind.config.js (saya pakai buat auto complete :v) dan integrate tailwind di head base.html
+- Menyiapkan reusable component berupa button, input_section, navbar, dan product_card di BASE_URL/templates
+   - Navbar bersifat sticky dan ada 3 component utama, yaitu Desktop Menu, Mobile Menu, dan Mobile Menu Button. Desktop Menu dan Mobile Menu Button bersifat salah satu muncul dengan indikator hidden md:flex dan md:hidden. Lalu ada Mobile Menu Button diberi fungsi untuk men-toggle (menambah dan menghilangkan) sifat hidden pada Mobile Menu. Dan terakhir Mobile Menu diberikan fungsi event listener agar menutup meng-hidden dirinya sendiri bila layar >= md (breakpoint Tailwind untuk Desktop View). Navbar ini hanya digunakan dalam view_all_product.html. Navbar tidak menerima parameter
+   - Input Section dipakai hanya untuk halaman form (register.html, login.html, add_product.html, dan edit_product.html).Input Section menerima parameter for, type, text, dan value. Dikarenakan tag input tidak terdapat atribut row, maka dikhususkan description menggunakan textarea
+   - Product Card dipakai hanya untuk halaman view_all_product.html yang menampilkan rincian dari suatu produk. Card juga terdapat Reusable Component Button untuk men-delete dan menuju ke halaman input.Product Card ini menerima parameter objek product.
+   - Button dipakai di semua halaman html dan juga Product Card. Karena tag button tidak memiliki atribut href untuk meminta permintaan ke url django, maka dibuat memisah component ini menjadi button untuk submit form dan a untuk meminta permintaan lain.
+- Setelah masukan reusable component dan ubah styling semua halaman html.

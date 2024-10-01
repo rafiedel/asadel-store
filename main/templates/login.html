@@ -16,11 +16,13 @@
         <h2 class="text-center font-extrabold text-3xl">Login</h2>
         <form method='POST' action=''> 
             {% csrf_token %}
-            <div>
+            <div class="mb-4 ml-4 mr-4">
               {% include 'input_section.html' with text='Username' type='username'  for='username'%}
               {% include 'input_section.html' with text='Password' type='password' for='password' %}
             </div>
-            {% include 'button.html' with text='Submit' color='blue'%}
+            <div class="mr-4 ml-4">
+              {% include 'button.html' with text='Submit' color='blue'%}
+            </div>
         </form>
         {% if messages %}
           <ul class="mb-4 text-red-600">
@@ -29,7 +31,7 @@
             {% endfor %}
           </ul>
         {% endif %}
-        <p class="text-center">
+        <p class="text-center mr-4 ml-4">
           Don't have an account yet?
           <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Register Now</a>
         </p>
