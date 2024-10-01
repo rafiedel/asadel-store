@@ -47,6 +47,7 @@ def create_product(request):
     context = {'form': form}
     return render(request, "create_product.html", context)
 
+@login_required(login_url="login")
 def edit_product(request, id):
     mood = Product.objects.get(pk = id)
 
