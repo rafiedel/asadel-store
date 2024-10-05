@@ -20,7 +20,7 @@
                 {% include 'input_section.html' with text='Price' type='number' for='price' value=form.price.value %}
                 {% include 'input_section.html' with text='Description' type='text' for='description' value=form.description.value %}
                 {% include 'input_section.html' with text='Stock Available' type='number' for='stock_available' value=form.stock_available.value %}
-                {% include 'input_section.html' with text='Photo' type='file' for='photo' value=form.photo.value %}
+                {% include 'input_section.html' with text='Photo' type='file' for='photo' value=form.photo %}
             </div>
             <div class="mb-4 ml-4 mr-4">
                 {% include 'button.html' with text='Submit' color='blue'%}
@@ -28,22 +28,5 @@
         </form>
     </div>
 </div>
-
-
-
-<!-- <h1>Edit Mood</h1>
-
-<form method="POST"  enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Edit Mood"/>
-            </td>
-        </tr>
-    </table>
-</form> -->
 
 {% endblock %}

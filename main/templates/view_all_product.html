@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
+
+{% block meta %}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<!-- untuk refresh basis data di frontend, agar data baru yang didapat dari reload etc tidak bertabrakan....???? -->
+{% endblock meta %}
+
 {% block content %}
 
 {% include 'navbar.html' %}
+
 
 {% for message in messages %}
 <div class="alert {{ message.tags }} alert-dismissible" role="alert">
@@ -12,30 +19,280 @@
 </div>
 {% endfor %}
 
-<div class="p-4 flex justify-between">
+<div class="h-10"></div>
+
+<div class="flex items-center justify-center m-4">
+    <div class="w-full max-w-md">
+        <div class="relative">
+            <input
+                type="text"
+                class="block w-full border-2 border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:border-blue-500"
+                placeholder="Search Product"
+                oninput="searchDebounceCallBack(this.value)"
+            >
+        </div>
+    </div>
+</div>
+
+
+<div class="p-4 flex justify-between items-center">
     <h5><span class="font-semibold">Sesi terakhir login</span>: <br>{{ last_login }}</h5>
-    <div class="w-18">{% include 'button.html' with text='Add Product' href='add' color='blue'%}</div>
+    <div class="flex flex-col md:flex-row items-center"> 
+        {% include 'button.html' with text='Add Product' href='add' color='blue' %}
+        <div class="w-4 h-1"></div>
+        {% include 'button.html' with text='Add Product With AJAX' color='green' id="openModalBtn" %}
+    </div>
 </div>
 
-<table>
 
-{% if not products %}
+<div id="product_cards"></div>
 
-<div class="flex flex-col items-center justify-center h-64">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20zm-2 14h4m-4-8h.01M16.5 8.5a.5.5 0 11-.5-.5.5.5 0 01.5.5zm-9 0a.5.5 0 11-.5-.5.5.5 0 01.5.5z"/>
-    </svg>
-    <p>No products available.</p>
+<!-- Modal -->
+<div id="crudModal" class="hidden fixed inset-0 items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+    <div id="crudModalContent" class="bg-white rounded-md p-2">
+      <!-- X Button -->
+      <div class="flex flex-row justify-end">
+        <button type="button" id="closeModalBtn" class="focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+      </div>
+      <!-- Form -->
+      <form id="productForm" enctype="multipart/form-data">
+        <div class="mb-4 ml-4 mr-4">
+            {% include 'input_section.html' with text='Name' type='text' for='name' %}
+            {% include 'input_section.html' with text='Price' type='number' for='price' %}
+            {% include 'input_section.html' with text='Description' type='text' for='description' %}
+            {% include 'input_section.html' with text='Stock Available' type='number' for='stock_available' %}
+            {% include 'input_section.html' with text='Photo' type='file' for='photo' %}
+        </div>
+        <div class="flex mb-4 ml-4 mr-4">
+            {% include 'button.html' with text='Submit' color='green' id="submitProduct"%}
+        </div>
+    </form>
 </div>
+  
+  
 
-{% else %}
+<script>
+    
+    // Search DebounceCallBack Query Search
+    let debounceTimer;
+    let product_name = "";
+    // Pagination
+    let currentPage = 1;
+    let minPage;
+    let maxPage;
+    // Inisial string
+    let classNameString = ""; // ini buat base div nya
+    let htmlString = ""; // ini masukin html kedalam div nya
 
-<div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
-    {% for product in products %}
-        {% include 'product_card.html' %}
-    {% endfor %}
-</div>
+    // Debounce for searching through names
+    function searchDebounceCallBack(searchValue) {
+        // Clear the previous timer if it exists
+        clearTimeout(debounceTimer);
 
-{% endif %}
+        if (product_name != searchValue) {
+            // Set a new timer to call retrieveProducts after 1 seconds
+            debounceTimer = setTimeout(() => {
+                product_name = searchValue
+                retrieveProducts();
+            }, 1000);
+        }
+    }
+
+    // Get with get_products
+    async function getProducts() {
+        const params = new URLSearchParams({
+            id: '{{ user.id }}',
+            page: currentPage,
+            product_name : product_name
+        });
+
+        const response = await fetch("{% url 'get_products' %}?" + params.toString());
+        
+        if (response.ok) {
+            return response.json();
+        }
+    }
+
+    // Get on Refresh -> Get with API 
+    async function retrieveProducts() {
+        buildSkeletonCards()
+
+        // The real loading (fetching data from API)
+        currentPage = 1 // initial data from start
+        const data = await getProducts();
+
+        // Store data
+        const products = data.products;
+        minPage = data.min_page;
+        maxPage = data.max_page;
+
+        // Process data of producst into html string
+        classNameString = "";
+        htmlString = "";
+        if (products.length === 0) {
+            buildNoData()
+        } else {
+            buildCards(products)
+        }   
+    }
+
+    // Get on Refresh -> Get with API 
+    async function retrieveMoreProducts() {
+        // The real loading (fetching data from API)
+        const data = await getProducts();
+
+        // Store data
+        const products = data.products;
+
+        // Process data of producst into html string
+        buildCards(products)
+    }
+
+    // Build UI Components
+    function buildSkeletonCards() {
+        classNameString = ""
+        htmlString = ""
+        // Loading indicator is viewing Skeleton Card
+        classNameString = "p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center"
+        for (var i = 0 ; i < 12 ; i++) {
+            htmlString += `
+                <!-- Product Card Skeleton -->
+                <div class="border rounded-lg shadow-lg p-4 min-w-full w-full animate-pulse">
+                    <!-- Title Skeleton -->
+                    <div class="mb-4">
+                        <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-300 rounded w-full"></div>
+                    </div>
+
+                    <!-- Price and Stock Skeleton -->
+                    <div class="mb-4">
+                        <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                        <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                    </div>
+
+                    <!-- Image Skeleton -->
+                    <div class="mb-4">
+                        <div class="w-full h-48 bg-gray-200 rounded-md"></div>
+                    </div>
+
+                    <!-- Buttons Skeleton -->
+                    <div class="flex justify-between">
+                        <!-- Skeleton for Edit Button -->
+                        <div class="h-8 bg-gray-300 rounded w-20"></div>
+                        <div class="w-4"></div>
+                        <!-- Skeleton for Delete Button -->
+                        <div class="h-8 bg-gray-300 rounded w-20"></div>
+                    </div>
+                </div>
+            `
+        }
+        document.getElementById("product_cards").innerHTML = htmlString;
+        document.getElementById("product_cards").className = classNameString;
+    }
+    function buildNoData() {
+        classNameString = "flex flex-col items-center justify-center h-64";
+        htmlString = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20zm-2 14h4m-4-8h.01M16.5 8.5a.5.5 0 11-.5-.5.5.5 0 01.5.5zm-9 0a.5.5 0 11-.5-.5.5.5 0 01.5.5z"/>
+            </svg>
+            <p>No products available.</p>
+        `;
+        document.getElementById("product_cards").innerHTML = htmlString;
+        document.getElementById("product_cards").className = classNameString;
+    }
+    function buildCards(products) {
+        classNameString = 'p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center';
+        products.forEach((item) => {
+            let photoSectionHtmlString = "";
+            if (item.photo) {
+                photoSectionHtmlString = `<img src="/media/${item.photo}" class="w-full h-48 object-cover rounded-md">`;
+            } else {
+                photoSectionHtmlString = `
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-md">
+                        <svg class="w-16 h-16 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm11.707 6.707l-3 3a1 1 0 01-1.414 0l-1.586-1.586a1 1 0 00-1.414 0l-3 3A1 1 0 015 11.293l3-3a1 1 0 011.414 0l1.586 1.586a1 1 0 001.414 0l3-3a1 1 0 011.414 1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                `;
+            }
+
+            htmlString += `
+                <div class="border rounded-lg shadow-lg p-4 min-w-full transition transform hover:shadow-2xl hover:scale-105 w-full">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-bold">${item.name}</h3>
+                        <h4 class="text-ellipsis overflow-hidden whitespace-nowrap" title="${item.description}">${item.description}</h4>
+                    </div>
+                    <div class="mb-4">
+                        <p><strong>Price:</strong> $${item.price}</p>
+                        <p><strong>Stock:</strong> ${item.stock_available}</p>
+                    </div>
+                    <div class="mb-4">
+                        ${photoSectionHtmlString}
+                    </div>
+                    <div class="flex justify-between">
+                        <a href="/edit-product/${item.id}" class="text-center font-bold w-full bg-blue-500 text-white hover:bg-blue-600 p-2 rounded transition duration-200 ease-in-out">Edit</a>
+                        <div class="w-4"></div>
+                        <a href="/delete/${item.id}" class="text-center font-bold w-full bg-red-500 text-white hover:bg-red-600 p-2 rounded transition duration-200 ease-in-out">Delete</a>
+                    </div>
+                </div>
+            `;
+        });
+        document.getElementById("product_cards").innerHTML = htmlString;
+        document.getElementById("product_cards").className = classNameString;
+    }
+
+    // When Reach Bottom add More Products
+    window.addEventListener ('scroll', async () => {
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = document.documentElement;
+        if (scrollTop + clientHeight >= scrollHeight - 200 &&
+            currentPage <= maxPage
+        ) {
+            currentPage += 1
+            await retrieveMoreProducts();
+        }
+    });
+
+    
+
+    // Pop Up Modal FOR Create Product with AJAX
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+    function toggleModal() {
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    }
+    modal.addEventListener('click', function(event) {
+      if (event.target === modal) { 
+        toggleModal()
+      }
+    });
+    document.getElementById('openModalBtn').addEventListener('click', toggleModal);
+    document.getElementById("closeModalBtn").addEventListener("click", toggleModal);
+    document.getElementById("submitProduct").onclick = createProduct;
+    async function createProduct(params) {
+        const response = fetch("{% url 'create_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#productForm')),
+        })
+
+        retrieveProducts()
+        
+        toggleModal();
+        document.getElementById("productForm").reset();
+
+        return false;
+    }
+
+    // Execute function for Initial page load 
+    retrieveProducts();
+</script>
 
 {% endblock content %}

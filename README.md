@@ -732,3 +732,37 @@ urlpatterns = [
    - Product Card dipakai hanya untuk halaman view_all_product.html yang menampilkan rincian dari suatu produk. Card juga terdapat Reusable Component Button untuk men-delete dan menuju ke halaman input.Product Card ini menerima parameter objek product.
    - Button dipakai di semua halaman html dan juga Product Card. Karena tag button tidak memiliki atribut href untuk meminta permintaan ke url django, maka dibuat memisah component ini menjadi button untuk submit form dan a untuk meminta permintaan lain.
 - Setelah masukan reusable component dan ubah styling semua halaman html.
+
+
+## Tugas 6: JavaScript dan AJAX
+
+### A. JavaScript dalam Software Development
+JavaScript membuat aplikasi web menjadi interaktif, dinamis, dan responsif. Selain itu juga memberikan fungsionalitas yang lebih di sisi klien, seperti manuplasi DOM dan melakukan komunikasi asinkronus dengan server. Dengan hal tersebut, JavaScript didukung oleh semua browser dan framework.
+### B. Keperluan *await* dalam *fetch()*
+Seperti namanya, "await", komponen ini hanya bekerja di fungsi yang bersifat asinkronus, yang artinya perlu menunggu hasil yang diberikan oleh sebuah perintah. Method fetch() adalah method Front-End yang digunakan untuk berkomunikasi dengan Back-End atau server. Karena Back-End perlu waktu untuk memproses permintaan yang diberikan, await digunakan untuk menunggu hasil yang diberikan Back-End melalui fetch() sebelum Front-End mengeksekusi program selanjutnya. Maka dari itu, jika method fetch() tidak ditandai dengan await, Front-End akan langsung mengeksekusi program selanjutnya sehingga ada kemungkina output tidak sesuai yang diharapkan
+### C. Decorator *csrf_exempt* dalam view AJAX Post
+Decorator *csrf_exempt* akan melewati validasi keamanan untuk mengecek keberadaan *csrf_token* di suatu permintaan. Sehingga permintaan AJAX yang tidak terdapat *csrf_token* masih bisa diproses.
+### D. Pembersihan Data Input di Backend
+Back-End adalah tempat sumber validasi yang valid bila berkaitan dengan ketentuan permintaan dan keamanan. Front-End hanya bisa memvalidasi dan mengirim masukan ke server, tapi tidak bisa mengecek keamanan permintaan secara utuh. Maka dari itu, Back-End merupakan pertahanan utama server ketika memproses permintaan dari luar.
+### E. Cara Implementasi Checklist
+1. Membuat views *get_products* dan *create_product_ajax* di main/views.py
+- View get_products menggunakan pagination dan query. Querynya berupa id user (required), page (required), dan product name. Pemfilteran data akan ditentukan oleh data yang terhubung ke user tersebut, page untuk pagination (jumlah data 8 per page), dan search by product name with strings. Lalu data akan dikembalikan dalam bentuk json dengan isi data produk yang terfilter, page awal dan akhir yang tersedia.
+- Membuat create_product_ajax yang akan menerima data dari body dan dilakukan pemrosesan validasi menggunakan strip_tags (agar tidak ada masukan tag html/ serangan XSS). Setelah melalui pemrosesan tersebut, baru data baru akan dibuat.
+2. Konfigurasikan URL dari kedua views tersebut dengan di mian/urls.py
+3. Ganti pemrosesan Data Back-End di template main/templates/view_all_product.html
+- Menghapus pemrosesan GET products data yang langsung dari Back-End
+- Membuat UI untuk mengganti products data
+   - div dengna id "product_cards"
+- Menambahkan fungsi biasa mauapun asinkronus untuk method GET products di script dengan membuat...
+   - fetchProducts() : mengembalikan json data dari sebuat pemanggilan fetch ke get_products dengan query id,name,dan product_name
+   - retrieveProducts() : inisial GET pertama (dimulai dari data kosong) untuk first page load dan searching through product_name. Fungsi ini menggunakan fetchProducts() untuk mengambil datanya dan diproses hasilnya dengan method ketiga build ui compoentns
+   - retrieveMoreProducts() : sama seperti retrieveProducts tetapi tujuannya untuk mengambil data produk lebih banyak dengan pagination. Karena pagenya meng-implement infinite scroll pagination, maka hanya berjalan jika current page != max_page beserta user telah scroll hampir ke paling bawah.
+   - buildSkeleton() : skeleton dari product card akan di buat dalam div untuk menandakan bahwa fetching data dari Back-End sedang berlangsung (Loading)
+   - buildNoData() : sad face dan text bahwa tidak ada data akan di buat dalam div jika tidak ada di diterima dari fetch
+   - builProductCards() : buat product cards dalam div jika ada data yang diberikan dari hasil fetch
+- Membuat UI untuk Crate Product with AJAX
+   - Pop Up Modal Form dengan id 'crudModal', 'crudModalContent', dan "productForm"
+   - 3 Button dengan id 'openModalBtn', 'closeModalBtn', 'submitProduct'
+- Membuat fungsi biasa maupun asinkronus untuk melakuakan create new product with ajax
+   - toggleModal() : akan mentoggle keberadaan flex dan hidden di id 'crudModal'. Yang diberikan akses fungsi ini adalah X Button, Wilayah di luar content Modal, Add Button yang baru dibuat, dan Submit Button Content Modal
+   - createProduct() : akan mengumpukan data-data dari id 'productForm' di dalam FormData. Dilakukan fetching dengan method POST, lalu akan mengeksekusi fungsi retrieveProducts untuk mengambil data produk dari awal.

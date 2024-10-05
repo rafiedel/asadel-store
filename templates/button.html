@@ -1,4 +1,4 @@
-{% if href %}
+{% if href%}
     <a 
         {% if href == 'edit' %}
             href="{% url 'edit_product' id %}"
@@ -22,11 +22,26 @@
         ">
         {{ text }}
     </a>
+{% elif id %}
+    <button 
+        id="{{ id }}"
+        class="
+            text-center
+            font-bold
+            w-full
+            min-w-[200px]  
+            bg-{{ color }}-500 text-white hover:bg-{{ color }}-600
+            p-2 rounded 
+            transition duration-200 ease-in-out
+        ">
+        {{ text }}
+    </button>
 {% else %}
     <button 
         type="submit" 
         class="
             text-center
+            font-bold
             w-full 
             bg-{{ color }}-500 text-white hover:bg-{{ color }}-600
             p-2 rounded 
