@@ -7,7 +7,7 @@
 - [Tugas Individu 3 : Implementasi Form dan Data Delivery pada Django](#tugas-individu-3--implementasi-form-dan-data-delivery-pada-django)
 - [Tugas Individu 4 : Implementasi Autentikasi, Season, dan Cookies pada Django](#tugas-individu-4--implementasi-autentikasi-session-dan-cookies-pada-django)
 - [Tugas Individu 5 : Desain Web menggunakan HTML, CSS dan Framework CSS](#tugas-individu-5--desain-web-menggunakan-html-css-dan-framework-css)
-- [Tugas Individu 6: JavaScript dan AJAX](#tugas-individu-6-javascript-dan-ajax)
+- [Tugas Individu 6 : JavaScript dan AJAX](#tugas-individu-6--javascript-dan-ajax)
 
 ## Identitas Mahasiswa
 
@@ -735,7 +735,7 @@ urlpatterns = [
 - Setelah masukan reusable component dan ubah styling semua halaman html.
 
 
-## Tugas Individu 6: JavaScript dan AJAX
+## Tugas Individu 6 : JavaScript dan AJAX
 
 ### A. JavaScript dalam Software Development
 JavaScript membuat aplikasi web menjadi interaktif, dinamis, dan responsif. Selain itu juga memberikan fungsionalitas yang lebih di sisi klien, seperti manuplasi DOM dan melakukan komunikasi asinkronus dengan server. Dengan hal tersebut, JavaScript didukung oleh semua browser dan digunakan dalam hampir semua framework.
