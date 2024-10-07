@@ -7,6 +7,7 @@
 - [Tugas Individu 3 : Implementasi Form dan Data Delivery pada Django](#tugas-individu-3--implementasi-form-dan-data-delivery-pada-django)
 - [Tugas Individu 4 : Implementasi Autentikasi, Season, dan Cookies pada Django](#tugas-individu-4--implementasi-autentikasi-session-dan-cookies-pada-django)
 - [Tugas Individu 5 : Desain Web menggunakan HTML, CSS dan Framework CSS](#tugas-individu-5--desain-web-menggunakan-html-css-dan-framework-css)
+- [Tugas 6: JavaScript dan AJAX](#tugas-6-javascript-dan-ajax)
 
 ## Identitas Mahasiswa
 
