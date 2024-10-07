@@ -121,7 +121,7 @@ def get_products(request):
     if not user_id or not page_number:
         return JsonResponse({'error': 'id and page are required'}, status=400)
 
-    # Filter products by user and optionally by item_name if provided
+    # Filter products by user and optionally by product_name if provided
     products_query = Product.objects.filter(user_id=user_id)
     if product_name:
         products_query = products_query.filter(name__icontains=product_name)
