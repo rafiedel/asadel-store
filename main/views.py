@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, JsonResponse
 from main.forms import ProductForm
@@ -126,6 +127,8 @@ def get_products(request):
     if product_name:
         products_query = products_query.filter(name__icontains=product_name)
 
+    products_query = products_query.order_by("id")
+
     # Paginate the fileterd Products
     paginator = Paginator(products_query, 8)
     try:
@@ -186,3 +189,23 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('login'))
     response.delete_cookie('last_login')
     return response
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_mood = Product.objects.create(
+            user=request.user,
+            name=data["name"],
+            price=int(data["price"]),
+            description=data["description"],
+            stock_available=int(data['stock_available']),
+            photo=None,
+        )
+
+        new_mood.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
