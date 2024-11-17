@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-vi)r3itc#a7*l5yynhbq5+1%=ii8y=8-nqej^n5b0$0pspcc_#
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "rafie-asadel-asadelstore.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", '10.0.2.2', "rafie-asadel-asadelstore.pbp.cs.ui.ac.id"]
 
 
 # Application definition
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main'
+    'main',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1","http://rafie-asadel-asadelstore.pbp.cs.ui.ac.id/", "https://rafie-asadel-asadelstore.pbp.cs.ui.ac.id/"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1", 'http://10.0.2.2', "http://rafie-asadel-asadelstore.pbp.cs.ui.ac.id/", "https://rafie-asadel-asadelstore.pbp.cs.ui.ac.id/"]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'

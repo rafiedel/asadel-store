@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.urls import path
-from .views import check_authentication, create_product, create_product_ajax, edit_product, delete_product, view_all_product,show_xml, show_json, show_xml_by_id, show_json_by_id, get_products, register, login_user, logout_user
+from .views import check_authentication, create_product, create_product_ajax, edit_product, delete_product, view_all_product,show_xml, show_json, show_xml_by_id, show_json_by_id, get_products, register, login_user, logout_user, create_product_flutter
 
 urlpatterns = [
     path('', check_authentication, name=''),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
+    path('create-flutter/', create_product_flutter, name='create_product_flutter'),
 ]
